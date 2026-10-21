@@ -407,25 +407,13 @@ def create_project(course_name: str) -> ResponseReturnValue:
     except ValidationError as e:
         app.logger.error("CSRF validation failed: %s", e)
         return render_create_project("CSRF Error")
-    except Exception:
-        app.logger.info("test1212")
 
-
-    try:
-         rms_user = app.rms_api.get_rms_user_by_id(session["rms"]["rms_id"])
-    except Exception:
-        app.logger.info("test rms_user")
+    rms_user = app.rms_api.get_rms_user_by_id(session["rms"]["rms_id"])
     # Set user to be course admin if they provided course token as a secret
-    try:
-        app.logger.info("414")
-        # full_alphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-        # if any(el in full_alphabet for el in request.form["secret"]):
-        #     return render_create_project("Invalid secret")
 
-        is_course_admin: bool = secrets.compare_digest(request.form["secret"].encode("utf-8"), course.token.encode("utf-8"))
-        if not is_course_admin and not secrets.compare_digest(request.form["secret"].encode("utf-8"), course.registration_secret.encode("utf-8")):
-            return render_create_project("Invalid secret")
-    except Exception:
+    is_course_admin: bool = secrets.compare_digest(request.form["secret"].encode("UTF-8"), course.token.encode("UTF-8"))
+    if not is_course_admin and not secrets.compare_digest(request.form["secret"].encode("UTF-8"),
+                                                            course.registration_secret.encode("UTF-8")):
         return render_create_project("Invalid secret")
 
     app.storage_api.sync_user_on_course(course.course_name, session["manytask"]["username"], is_course_admin)
