@@ -108,6 +108,7 @@ main() {
         if app
           # Update existing app with correct scopes
           app.update!(
+            organization_id: Organizations::Organization::DEFAULT_ORGANIZATION_ID,
             redirect_uri: '${REDIRECT_URI}',
             scopes: 'openid email profile read_user',
             trusted: true
@@ -116,6 +117,7 @@ main() {
           # Create new app with all required scopes
           app = Doorkeeper::Application.create!(
             name: 'manytask-local',
+            organization_id: Organizations::Organization::DEFAULT_ORGANIZATION_ID,
             redirect_uri: '${REDIRECT_URI}',
             scopes: 'openid email profile read_user',
             confidential: true,
