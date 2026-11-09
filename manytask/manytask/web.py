@@ -38,6 +38,7 @@ from .utils.generic import (
     validate_name,
 )
 from .utils.sourcecraft import normalize_string
+from .api import get_group_link
 
 SESSION_VERSION = 1.5
 CACHE_TIMEOUT_SECONDS = 3600
@@ -203,6 +204,7 @@ def course_page(course_name: str) -> ResponseReturnValue:
         deadlines_type=course.deadlines_type,
         has_role=has_role,
         sourcecraft_accept_invite_required=sourcecraft_accept_invite_required,
+        get_links=get_group_link
     )
 
 

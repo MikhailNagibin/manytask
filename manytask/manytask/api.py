@@ -6,6 +6,9 @@ import secrets
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from typing import Any, Callable, TypeVar
+import requests
+import os
+from dotenv import load_dotenv
 
 import yaml
 from flask import Blueprint, abort, current_app, jsonify, request, session
@@ -1951,3 +1954,25 @@ def assign_program_manager(course_name: str, validated_data: AssignProgramManage
         role=ROLE_PROGRAM_MANAGER,
     )
     return jsonify(response.model_dump()), HTTPStatus.CREATED
+
+
+def get_group_link(course_name: str, group_name: str) -> str:
+    load_dotenv()
+
+    TOKEN = os.getenv("YANDEX_DISK_TOKEN")
+
+    headers = {
+        "Authorization": f"OAuth {TOKEN}"
+    }
+    file_path = f"/test_shad/{course_name}/{group_name}/lecture.docx"
+
+    response = requests.get(
+        "https://cloud-api.yandex.net/v1/disk/resources",
+        headers=headers,
+        params={
+            "path": file_path,
+            "fields": "public_url"
+        }
+    )
+    ans = response.json()
+    return ans["public_url"] if "public_url" in ans else ""
