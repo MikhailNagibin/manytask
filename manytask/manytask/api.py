@@ -1964,7 +1964,7 @@ def get_group_link(course_name: str, group_name: str) -> str:
     headers = {
         "Authorization": f"OAuth {TOKEN}"
     }
-    file_path = f"/test_shad/{course_name}/{group_name}/lecture.docx"
+    file_path = f"/{course_name}/{group_name}/lecture.mp4"
 
     response = requests.get(
         "https://cloud-api.yandex.net/v1/disk/resources",
